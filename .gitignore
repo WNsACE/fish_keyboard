@@ -1,4 +1,5 @@
 /.sconsign.dblite
+/.vscode
 /bin
 /lib
 *.obj
