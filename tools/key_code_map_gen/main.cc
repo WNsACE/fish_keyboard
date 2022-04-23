@@ -263,7 +263,11 @@ int main() {
                 info.keyboard_key_name[l - 1] = 0;
                 memcpy(info.keyboard_key_name, start, l - 1);
               }
-              keyboard_info_list.push_back(move(info));
+              if (find(keyboard_info_list.begin(), keyboard_info_list.end(), move(info)) != keyboard_info_list.end()) {
+                delete[] info.keyboard_key_name;
+              } else {
+                keyboard_info_list.push_back(move(info));
+              }
               start = end + 1;
             } while (end != NULL);
           }
@@ -271,19 +275,20 @@ int main() {
       }
 
       keyboard_info_list.sort();
-      keyboard_info_list.erase(unique(keyboard_info_list.begin(), keyboard_info_list.end()), keyboard_info_list.end());
 
       fopen_s(&inc_file, inc_file_path, "w+");
       if (inc_file != NULL) {
         write_bom_head_info(inc_file);
+        write_line(inc_file, "#ifndef __KEYBOARD_KEY_CODE_MAP_INC__");
+        write_line(inc_file, "#define __KEYBOARD_KEY_CODE_MAP_INC__\n");
+
         write_line(inc_file, "static const scan_key_code_info_t g_keyboard_key_code_map[] = {");
         for (list<keyboard_info_t>::iterator begin = keyboard_info_list.begin(); begin != keyboard_info_list.end(); begin++) {
           char str_info[256] = {0};
+          const char *str_code = g_keyboard_key_code_relation_table[begin->keyboard_key_name];
           if (*begin->keyboard_key_name == '\"' || *begin->keyboard_key_name == '\\') {
-            sprintf_s(str_info, sizeof(str_info), "  {\"\\%s\", },", begin->keyboard_key_name);
+            sprintf_s(str_info, sizeof(str_info), "  {\"\\%s\", %s},", begin->keyboard_key_name, str_code);
           } else {
-            uint8_t c = (uint8_t)(*begin->keyboard_key_name);
-            const char *str_code = g_keyboard_key_code_relation_table[begin->keyboard_key_name];
             sprintf_s(str_info, sizeof(str_info), "  {\"%s\", %s},", begin->keyboard_key_name, str_code);
           }
           write_line(inc_file, str_info);
@@ -318,6 +323,7 @@ int main() {
           }
         }
         write_line(inc_file, "};");
+        write_line(inc_file, "\n#endif");
 
         fclose(inc_file);
       }
