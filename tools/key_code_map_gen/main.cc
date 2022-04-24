@@ -202,11 +202,11 @@ int main() {
   const char *file_path = "../res/keyboard-layout.json";
   const char *inc_file_path = "../src/keyboard/keyboard_key_code_map.inc";
 
-  fopen_s(&file, file_path, "r");
+  file = fopen(file_path, "r");
   if (file == NULL) {
     file_path = "./res/keyboard-layout.json";
     inc_file_path = "./src/keyboard/keyboard_key_code_map.inc";
-    fopen_s(&file, file_path, "r");
+    file = fopen(file_path, "r");
   }
 
   if (file != NULL) {
@@ -274,9 +274,10 @@ int main() {
         }
       }
 
+      cJSON_Delete(json);
       keyboard_info_list.sort();
 
-      fopen_s(&inc_file, inc_file_path, "w+");
+      inc_file = fopen(inc_file_path, "w+");
       if (inc_file != NULL) {
         write_bom_head_info(inc_file);
         write_line(inc_file, "#ifndef __KEYBOARD_KEY_CODE_MAP_INC__");
@@ -333,6 +334,8 @@ int main() {
       delete[] iter->keyboard_key_name;
     }
     fclose(file);
+
+    delete[] str_keyboard_layout;
   }
 
   return 0;
