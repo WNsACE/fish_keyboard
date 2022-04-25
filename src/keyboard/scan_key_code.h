@@ -15,7 +15,7 @@ typedef enum _scan_key_code_t {
     SCAN_KEY_CTRL = 17,                                                                                                 //Ctrl 键
     SCAN_KEY_ALT = 18,                                                                                                  //Alt 键
     SCAN_KEY_PAUSE_BREAK = 19,                                                                                          //中断暂停键
-    SCAN_KEY_CAPE_LOCK = 20,                                                                                            //大小写锁定键
+    SCAN_KEY_CAPES_LOCK = 20,                                                                                            //大小写锁定键
 
     SCAN_KEY_ESC = 27,                                                                                                  //Esc键
 

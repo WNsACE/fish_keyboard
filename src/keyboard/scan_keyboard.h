@@ -19,8 +19,7 @@ BEGIN_C_DECLS
 #define SCAN_KEYBOARD_LAYOUT_MAX_NUMBER 2
 #endif
 
-typedef void (*keyboard_switch_scan_line_t)(uint32_t number_line);
-typedef void (*keyboard_get_line_keys_t)(uint32_t* key_list, uint32_t* key_list_size);
+typedef void (*keyboard_get_scan_keys_t)(uint32_t number_line, uint32_t* key_list, uint32_t* key_list_size);
 
 typedef struct _scan_keyboard_line_info_t {
   uint32_t key_map_start;
@@ -29,26 +28,45 @@ typedef struct _scan_keyboard_line_info_t {
 
 
 typedef struct _scan_keyboard_info_t {
-  uint32_t line_size;
-  uint32_t line_key_size;
+  uint8_t line_size;
+  uint8_t line_key_size;
 
-  uint32_t key_map[SCAN_KEYBOARD_LAYOUT_MAX_NUMBER][SCAN_KEYBOARD_LINE_MAX_SIZE][SCAN_KEYBOARD_LINE_KEY_MAX_SIZE];
+  uint8_t fn_x;
+  uint8_t fn_y;
+
+  uint8_t caps_lock_x;
+  uint8_t caps_lock_y;
+
+  uint8_t shift_left_x;
+  uint8_t shift_left_y;
+
+  uint8_t shift_rigth_x;
+  uint8_t shift_rigth_y;
+
+  uint8_t number_lock_x;
+  uint8_t number_lock_y;
+
+#if SCAN_KEY_CODE_COUNT < 65536
+  uint16_t 
+#else
+  uint32_t
+#endif
+  key_map[SCAN_KEYBOARD_LAYOUT_MAX_NUMBER][SCAN_KEYBOARD_LINE_MAX_SIZE][SCAN_KEYBOARD_LINE_KEY_MAX_SIZE];
 } scan_keyboard_info_t;
 
 typedef struct _scan_keyboard_t {
-  scan_keyboard_info_t info;
+  scan_keyboard_info_t* info;
 
-  keyboard_get_line_keys_t get_line_keys;
-  keyboard_switch_scan_line_t switch_scan_line;
+  keyboard_get_scan_keys_t get_line_keys;
 } scan_keyboard_t;
 
 scan_keyboard_info_t* scan_keyboard_info_init(scan_keyboard_info_t* scan_keyboard_info, const char* str_keyboard_layout);
 
-void scan_keyboard_set_function(scan_keyboard_t* scan_keyboard, keyboard_switch_scan_line_t switch_scan_line, keyboard_get_line_keys_t get_line_keys);
+const scan_keyboard_t* scan_keyboard_init(scan_keyboard_info_t* scan_keyboard_info, keyboard_get_scan_keys_t get_line_keys);
 
-void scan_keyboard_deinit(void);
+void scan_keyboard_destroy(const scan_keyboard_t* scan_keyboard);
 
-void scan_keyboard_get_scan_key_list(const scan_keyboard_t* scan_keyboard, uint32_t* key_list, uint32_t* key_list_size);
+c_ret_t scan_keyboard_get_scan_key_list(const scan_keyboard_t* scan_keyboard, uint32_t* key_list, uint32_t* key_list_size);
 
 END_C_DECLS
 

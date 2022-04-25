@@ -79,7 +79,7 @@ static map<string, const char *> g_keyboard_key_code_relation_table = {
     {"Backspace", "SCAN_KEY_BACK_SPACE"},
     {"Break", "SCAN_KEY_PAUSE_BREAK"},
     {"C", "SCAN_KEY_C"},
-    {"Caps Lock", "SCAN_KEY_CAPE_LOCK"},
+    {"Caps Lock", "SCAN_KEY_CAPES_LOCK"},
     {"Ctrl", "SCAN_KEY_CTRL"},
     {"D", "SCAN_KEY_D"},
     {"Del", "SCAN_KEY_DELETE"},

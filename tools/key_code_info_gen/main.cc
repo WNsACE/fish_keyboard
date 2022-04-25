@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
             uint32_t i = 0;
             uint32_t size = sizeof(scan_keyboard_info_t);
             uint8_t* buff = (uint8_t*)p_scan_keyboard_info;
-            write_printf_line(inc_file, "TK_CONST_DATA_ALIGN(const unsigned char %s[]) = {", "g_scan_keyboard_info_data");
+            write_printf_line(inc_file, "C_CONST_DATA_ALIGN(const unsigned char %s[]) = {", "g_scan_keyboard_info_data");
             for (i = 0; i < size; i++) {
               if ((i % 16) == 0) {
                 write_line(inc_file, "\n");
