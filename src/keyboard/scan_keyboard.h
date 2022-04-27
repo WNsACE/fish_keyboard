@@ -19,13 +19,7 @@ BEGIN_C_DECLS
 #define SCAN_KEYBOARD_LAYOUT_MAX_NUMBER 2
 #endif
 
-typedef void (*keyboard_get_scan_keys_t)(uint32_t number_line, uint32_t* key_list, uint32_t* key_list_size);
-
-typedef struct _scan_keyboard_line_info_t {
-  uint32_t key_map_start;
-  uint32_t key_length;
-} scan_keyboard_line_info_t;
-
+typedef c_bool_t (*keyboard_get_scan_keys_t)(uint32_t number_line, uint8_t* key_list, uint32_t* key_list_size);
 
 typedef struct _scan_keyboard_info_t {
   uint8_t line_size;
@@ -40,8 +34,8 @@ typedef struct _scan_keyboard_info_t {
   uint8_t shift_left_x;
   uint8_t shift_left_y;
 
-  uint8_t shift_rigth_x;
-  uint8_t shift_rigth_y;
+  uint8_t shift_right_x;
+  uint8_t shift_right_y;
 
   uint8_t number_lock_x;
   uint8_t number_lock_y;
@@ -57,6 +51,11 @@ typedef struct _scan_keyboard_info_t {
 typedef struct _scan_keyboard_t {
   scan_keyboard_info_t* info;
 
+  c_bool_t is_fn;
+  c_bool_t is_shift;
+  c_bool_t is_caps_lock;
+  c_bool_t is_number_lock;
+
   keyboard_get_scan_keys_t get_line_keys;
 } scan_keyboard_t;
 
@@ -66,7 +65,7 @@ const scan_keyboard_t* scan_keyboard_init(scan_keyboard_info_t* scan_keyboard_in
 
 void scan_keyboard_destroy(const scan_keyboard_t* scan_keyboard);
 
-c_ret_t scan_keyboard_get_scan_key_list(const scan_keyboard_t* scan_keyboard, uint32_t* key_list, uint32_t* key_list_size);
+uint32_t scan_keyboard_get_scan_key_list(scan_keyboard_t* scan_keyboard, uint32_t* key_list, uint32_t key_list_size);
 
 END_C_DECLS
 
