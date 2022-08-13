@@ -1,8 +1,8 @@
 ﻿#include <stdio.h>
 #include <stdarg.h>
 #include "cjson/cJSON.h"
-#include "keyboard/scan_key_code.h"
 #include "keyboard/scan_keyboard.h"
+#include "keyboard/usb_hid_key_code.h"
 
 static void write_line(FILE *file, const char *str) {
   fwrite(str, sizeof(char), strlen(str), file);

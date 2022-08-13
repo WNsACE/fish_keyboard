@@ -1,6 +1,8 @@
 ﻿#ifndef __LED_ANIMATOR_H__
 #define __LED_ANIMATOR_H__
 
+#include "../fish_keyboard_config.h"
+
 #include "../base/c_types_def.h"
 #include "../base/c_easing_func.h"
 #include "../tim_pwm_led/tim_pwm_led.h"
