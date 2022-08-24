@@ -13,4 +13,7 @@
 /*  键盘扫描最大层数   */
 // #define SCAN_KEYBOARD_LAYOUT_MAX_NUMBER 2
 
+/*  键盘发送最大按键数   */
+// #define FISH_KEYBOARD_SEND_KEY_MAX_NUMBER 6
+
 #endif

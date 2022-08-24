@@ -26,6 +26,12 @@ typedef union _tim_pwm_led_pixel_grb_t {
   uint32_t value;
 } tim_pwm_led_pixel_grb_t;
 
+typedef union _tim_pwm_led_pixel_hsv_t {
+  float h;
+  float s;
+  float v;  
+} tim_pwm_led_pixel_hsv_t;
+
 typedef enum _tim_pwm_led_type_t {
   TIM_PWM_LED_TYPE_NONE = 0,
   TIM_PWM_LED_TYPE_WS2812_GRB,
@@ -59,6 +65,8 @@ struct _tim_pwm_led_t {
   uint32_t led_number;
   uint32_t pixel_bit_size;
   uint32_t led_buffer_offset;
+  uint8_t max_alpha;
+  float max_hsv_value;
   tim_pwm_led_type_t led_type;
 
   tim_pwm_led_send_data_t send_data_cb;

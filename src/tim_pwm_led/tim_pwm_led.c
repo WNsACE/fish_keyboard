@@ -18,14 +18,16 @@ static const tim_pwm_led_vt_t* tim_pwm_led_get_vtable(tim_pwm_led_type_t led_typ
   return g_led_get_vtable_list[(uint32_t)led_type - 1]();
 }
 
-tim_pwm_led_t* tim_pwm_led_init(tim_pwm_led_t* tim_pwm_led, tim_pwm_led_type_t led_type, uint16_t* led_buffer, uint32_t led_number, uint32_t led_buffer_offset, tim_pwm_led_send_data_t send_data_cb) {
+tim_pwm_led_t* tim_pwm_led_init(tim_pwm_led_t* tim_pwm_led, tim_pwm_led_type_t led_type, float max_hsv_value, uint16_t* led_buffer, uint32_t led_number, uint32_t led_buffer_offset, tim_pwm_led_send_data_t send_data_cb) {
   assert(tim_pwm_led != NULL && led_buffer != NULL && led_number > 0 && send_data_cb != NULL);
   tim_pwm_led->led_type = led_type;
   tim_pwm_led->led_buffer = led_buffer;
   tim_pwm_led->led_number = led_number;
   tim_pwm_led->send_data_cb = send_data_cb;
+  tim_pwm_led->max_hsv_value = max_hsv_value;
   tim_pwm_led->led_buffer_offset = led_buffer_offset;
   tim_pwm_led->vt = tim_pwm_led_get_vtable(led_type);
+  tim_pwm_led->max_alpha = (uint8_t)(max_hsv_value * 256);
 
   tim_pwm_led->pixel_bit_size = tim_pwm_led->vt->get_pixel_bit_size();
 
@@ -36,6 +38,7 @@ tim_pwm_led_t* tim_pwm_led_init(tim_pwm_led_t* tim_pwm_led, tim_pwm_led_type_t l
 }
 
 tim_pwm_led_pixel_t tim_pwm_led_pixel_init(const tim_pwm_led_t* tim_pwm_led, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+  a = (tim_pwm_led->max_alpha * a) >> 8;
   if (a < 0xf8) {
     BLEND_COLOR(a, r);
     BLEND_COLOR(a, g);
@@ -43,6 +46,24 @@ tim_pwm_led_pixel_t tim_pwm_led_pixel_init(const tim_pwm_led_t* tim_pwm_led, uin
   } else if (a < 0x08) {
     r = g = b = 0;
   }
+  switch (tim_pwm_led->led_type) {
+  case TIM_PWM_LED_TYPE_WS2812_GRB: {
+    tim_pwm_led_pixel_grb_t pixel;
+    pixel.color.r = r;
+    pixel.color.g = g;
+    pixel.color.b = b;
+    return pixel.value;
+  }
+  default:
+    break;
+  }
+  return 0;
+}
+
+tim_pwm_led_pixel_t tim_pwm_led_pixel_init_by_hsv(const tim_pwm_led_t* tim_pwm_led, float h, float s) {
+  uint8_t r, g, b;
+  float v = tim_pwm_led->max_hsv_value;
+  convertHSVtoRGB(h, s, v, &r, &g, &b);
   switch (tim_pwm_led->led_type) {
   case TIM_PWM_LED_TYPE_WS2812_GRB: {
     tim_pwm_led_pixel_grb_t pixel;
