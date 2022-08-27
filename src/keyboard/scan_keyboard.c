@@ -103,7 +103,7 @@ scan_keyboard_info_t* scan_keyboard_info_init(scan_keyboard_info_t* scan_keyboar
                 scan_keyboard_set_layer_info(scan_keyboard_info, (uint8_t)line_key_size, (uint8_t)i, usb_hid_key_code);
               } else {
                 scan_keyboard_info->key_map[z++][i][line_key_size] = (usb_hid_key_code_t)info->usb_hid_key_code;
-                scan_keyboard_set_layer_info(scan_keyboard_info, (uint8_t)line_key_size, (uint8_t)i, info->usb_hid_key_code);
+                scan_keyboard_set_layer_info(scan_keyboard_info, (uint8_t)line_key_size, (uint8_t)i, (usb_hid_key_code_t)info->usb_hid_key_code);
               }
               break;
             }
@@ -181,14 +181,14 @@ static void scan_keyboard_update_key_status(scan_keyboard_t* scan_keyboard, uint
   UPDATE_SCAN_KEYBOARB_LOCK_KEY(scroll_lock, x, y, down);
 }
 
-static c_bool_t scan_keyboard_is_number_key(scan_keyboard_t* scan_keyboard, uint8_t x, uint8_t y) {
-  if (scan_keyboard->info->number_lock_x != 0 && scan_keyboard->info->number_lock_y != 0) {
-    if (scan_keyboard->info->number_lock_x <= x || scan_keyboard->info->number_lock_y <= y) {
-      return TRUE;
-    }
-  }
-  return FALSE;
-}
+// static c_bool_t scan_keyboard_is_number_key(scan_keyboard_t* scan_keyboard, uint8_t x, uint8_t y) {
+//   if (scan_keyboard->info->number_lock_x != 0 && scan_keyboard->info->number_lock_y != 0) {
+//     if (scan_keyboard->info->number_lock_x <= x || scan_keyboard->info->number_lock_y <= y) {
+//       return TRUE;
+//     }
+//   }
+//   return FALSE;
+// }
 
 static c_bool_t scan_keyboard_is_FX_key_by_usb(scan_keyboard_key_map_type_t key) {
   return USB_HID_KEY_CODE_F1 <= key && key <= USB_HID_KEY_CODE_F12;
@@ -209,7 +209,7 @@ static uint32_t scan_keyboard_add_key_by_list(usb_hid_key_code_t key, uint32_t x
 }
 
 uint32_t scan_keyboard_get_scan_key_list(scan_keyboard_t* scan_keyboard, scan_keyboard_send_key_type_t* key_list, uint32_t key_list_size) {
-  uint32_t x = 0, y = 0, n = 0;
+  uint32_t x = 0, y = 0;
   uint32_t t_key_list_size = 0;
   if (scan_keyboard == NULL || scan_keyboard->get_line_keys == NULL || key_list == NULL) {
     return t_key_list_size;
@@ -331,13 +331,40 @@ c_bool_t scan_keyboard_get_usb_keyboard_code(scan_keyboard_t* scan_keyboard, uin
 }
 
 c_bool_t scan_keyboard_get_num_lock_statue(scan_keyboard_t* scan_keyboard) {
-  return scan_keyboard->is_scroll_lock.lock;
+  if (scan_keyboard != NULL) {
+    return scan_keyboard->is_scroll_lock.lock;
+  }
+  return FALSE;
 }
 
 c_bool_t scan_keyboard_get_caps_lock_statue(scan_keyboard_t* scan_keyboard) {
-  return scan_keyboard->is_scroll_lock.lock;
+  if (scan_keyboard != NULL) {
+    return scan_keyboard->is_scroll_lock.lock;
+  }
+  return FALSE;
 }
 
 c_bool_t scan_keyboard_get_scroll_lock_statue(scan_keyboard_t* scan_keyboard) {
-  return scan_keyboard->is_scroll_lock.lock;
+  if (scan_keyboard != NULL) {
+    return scan_keyboard->is_scroll_lock.lock;
+  }
+  return FALSE;
+}
+
+void scan_keyboard_set_num_lock_statue(scan_keyboard_t* scan_keyboard, c_bool_t lock) {
+  if (scan_keyboard != NULL) {
+    scan_keyboard->is_scroll_lock.lock = lock;
+  }
+}
+
+void scan_keyboard_set_caps_lock_statue(scan_keyboard_t* scan_keyboard, c_bool_t lock) {
+  if (scan_keyboard != NULL) {
+    scan_keyboard->is_scroll_lock.lock = lock;
+  }
+}
+
+void scan_keyboard_set_scroll_lock_statue(scan_keyboard_t* scan_keyboard, c_bool_t lock) {
+  if (scan_keyboard != NULL) {
+    scan_keyboard->is_scroll_lock.lock = lock;
+  }
 }

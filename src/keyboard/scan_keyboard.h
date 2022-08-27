@@ -131,10 +131,12 @@ uint32_t scan_keyboard_get_scan_key_list(scan_keyboard_t* scan_keyboard, scan_ke
 uint32_t scan_keyboard_get_usb_keyboard_code(scan_keyboard_t* scan_keyboard, uint8_t keyboard[8]);
 
 c_bool_t scan_keyboard_get_num_lock_statue(scan_keyboard_t* scan_keyboard);
-
 c_bool_t scan_keyboard_get_caps_lock_statue(scan_keyboard_t* scan_keyboard);
-
 c_bool_t scan_keyboard_get_scroll_lock_statue(scan_keyboard_t* scan_keyboard);
+
+void scan_keyboard_set_num_lock_statue(scan_keyboard_t* scan_keyboard, c_bool_t lock);
+void scan_keyboard_set_caps_lock_statue(scan_keyboard_t* scan_keyboard, c_bool_t lock);
+void scan_keyboard_set_scroll_lock_statue(scan_keyboard_t* scan_keyboard, c_bool_t lock);
 
 END_C_DECLS
 

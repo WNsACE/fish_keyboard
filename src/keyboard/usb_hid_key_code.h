@@ -445,6 +445,10 @@ typedef struct _usb_hid_key_code_info_t {
 #define USB_HID_KEY_CODE_CTRL  USB_HID_KEY_CODE_TO_SCANCODE(USB_HID_KEY_CODE_LCTRL, USB_HID_KEY_CODE_RCTRL)
 #define USB_HID_KEY_CODE_SHIFT  USB_HID_KEY_CODE_TO_SCANCODE(USB_HID_KEY_CODE_LSHIFT, USB_HID_KEY_CODE_RSHIFT)
 
+#define USB_HID_NUM_LOCK_STATE_UP      1 << 0
+#define USB_HID_CAPS_LOCK_STATE_UP      1 << 1
+#define USB_HID_SCROLL_LOCK_STATE_UP      1 << 2
+
 #include "./keyboard_key_code_map.inc"
 
 #endif
