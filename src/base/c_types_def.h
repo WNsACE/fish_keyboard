@@ -28,6 +28,8 @@
 #define c_clamp(a, mn, mx) ((a) < (mn) ? (mn) : ((a) > (mx) ? (mx) : (a)))
 #define c_clampi(a, mn, mx) (int32_t)((a) < (mn) ? (mn) : ((a) > (mx) ? (mx) : (a)))
 
+#define C_UNUSED(X) (void)X                             /* To avoid gcc/g++ warnings */
+
 #ifdef __cplusplus
 #ifndef BEGIN_C_DECLS
 #define BEGIN_C_DECLS extern "C" {

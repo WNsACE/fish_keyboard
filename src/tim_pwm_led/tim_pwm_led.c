@@ -30,6 +30,10 @@ tim_pwm_led_t* tim_pwm_led_init(tim_pwm_led_t* tim_pwm_led, tim_pwm_led_type_t l
   return tim_pwm_led;
 }
 
+void tim_pwm_led_deinit(tim_pwm_led_t* tim_pwm_led) {
+  C_UNUSED(tim_pwm_led);
+}
+
 tim_pwm_led_pixel_t tim_pwm_led_pixel_init(const tim_pwm_led_t* tim_pwm_led, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
   a = (tim_pwm_led->max_alpha * a) >> 8;
   if (a < 0xf8) {
@@ -69,6 +73,10 @@ tim_pwm_led_pixel_t tim_pwm_led_pixel_init_by_hsv(const tim_pwm_led_t* tim_pwm_l
     break;
   }
   return 0;
+}
+
+void tim_pwm_led_pixel_set_led_max_power(tim_pwm_led_t* tim_pwm_led, float led_max_power) {
+  tim_pwm_led->max_hsv_value = c_min(led_max_power, TIM_PWM_LED_STM32_LED_MAX_POWER);
 }
 
 void tim_pwm_led_pixel_to_bytes(tim_pwm_led_t* tim_pwm_led, uint32_t index, tim_pwm_led_pixel_t pixel) {

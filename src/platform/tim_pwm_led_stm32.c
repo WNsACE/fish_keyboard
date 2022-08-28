@@ -62,6 +62,7 @@ void tim_pwm_led_stm32_deinit(tim_pwm_led_stm32_t* tim_pwm_led_stm32) {
   if (s_tim_pwm_led_stm32.timer_id != C_TIMER_MANAGER_INVALID_ID) {
     c_timer_manager_remove(c_timer_manager(), s_tim_pwm_led_stm32.timer_id);
   }
+  tim_pwm_led_deinit(TIM_PWM_LED(tim_pwm_led_stm32));
 }
 
 static void tim_pwm_led_stm32_on_timer_by_breathing_color(tim_pwm_led_stm32_t* tim_pwm_led_stm32, float interval, float* v, c_bool_t* is_reversed) {
