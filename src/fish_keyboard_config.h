@@ -16,4 +16,11 @@
 /*  键盘发送最大按键数   */
 // #define FISH_KEYBOARD_SEND_KEY_MAX_NUMBER 6
 
+/*  灯光的个数   */
+// #define TIM_PWM_LED_STM32_LED_NUMBER 8
+
+/* 灯的最大亮度（0-1.0） */
+// #define TIM_PWM_LED_STM32_LED_MAX_POWER    1.0f
+#define TIM_PWM_LED_STM32_LED_MAX_POWER    0.2f
+
 #endif

@@ -4,12 +4,6 @@
 
 extern const tim_pwm_led_vt_t* tim_pwm_led_ws2812_get_vt(void);
 
-static tim_pwm_led_t* s_tim_pwm_led = NULL;
-
-tim_pwm_led_t* tim_pwm_led_get(void) {
-  return s_tim_pwm_led;
-}
-
 const static tim_pwm_led_get_vtabel g_led_get_vtable_list[TIM_PWM_LED_TYPE_COUNT] = {
   tim_pwm_led_ws2812_get_vt,
 };
@@ -33,7 +27,6 @@ tim_pwm_led_t* tim_pwm_led_init(tim_pwm_led_t* tim_pwm_led, tim_pwm_led_type_t l
 
   memset(led_buffer, 0x0, sizeof(uint16_t) * (led_number + led_buffer_offset));
 
-  s_tim_pwm_led = tim_pwm_led;
   return tim_pwm_led;
 }
 
@@ -60,9 +53,9 @@ tim_pwm_led_pixel_t tim_pwm_led_pixel_init(const tim_pwm_led_t* tim_pwm_led, uin
   return 0;
 }
 
-tim_pwm_led_pixel_t tim_pwm_led_pixel_init_by_hsv(const tim_pwm_led_t* tim_pwm_led, float h, float s) {
+tim_pwm_led_pixel_t tim_pwm_led_pixel_init_by_hsv(const tim_pwm_led_t* tim_pwm_led, float h, float s, float v) {
   uint8_t r, g, b;
-  float v = tim_pwm_led->max_hsv_value;
+  v = tim_pwm_led->max_hsv_value * v;
   convertHSVtoRGB(h, s, v, &r, &g, &b);
   switch (tim_pwm_led->led_type) {
   case TIM_PWM_LED_TYPE_WS2812_GRB: {
@@ -78,31 +71,35 @@ tim_pwm_led_pixel_t tim_pwm_led_pixel_init_by_hsv(const tim_pwm_led_t* tim_pwm_l
   return 0;
 }
 
-void tim_pwm_led_pixel_to_bytes(const tim_pwm_led_t* tim_pwm_led, uint32_t index, tim_pwm_led_pixel_t pixel) {
+void tim_pwm_led_pixel_to_bytes(tim_pwm_led_t* tim_pwm_led, uint32_t index, tim_pwm_led_pixel_t pixel) {
   assert(tim_pwm_led != NULL && tim_pwm_led->led_number > index);
   tim_pwm_led->vt->pixel_to_bytes(pixel, tim_pwm_led->led_buffer + tim_pwm_led->led_buffer_offset + index * tim_pwm_led->pixel_bit_size);
 }
 
-void tim_pwm_led_pixel_to_bytes_by_data(const tim_pwm_led_t* tim_pwm_led, uint32_t index, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+void tim_pwm_led_pixel_to_bytes_by_data(tim_pwm_led_t* tim_pwm_led, uint32_t index, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
   assert(tim_pwm_led != NULL && tim_pwm_led->led_number > index);
   tim_pwm_led->vt->pixel_to_bytes_by_data(r, g, b, a, tim_pwm_led->led_buffer + tim_pwm_led->led_buffer_offset + index * tim_pwm_led->pixel_bit_size);
 }
 
-void tim_pwm_led_pixel_reset_data(const tim_pwm_led_t* tim_pwm_led) {
+void tim_pwm_led_pixel_reset_data(tim_pwm_led_t* tim_pwm_led) {
   assert(tim_pwm_led != NULL);
   tim_pwm_led->vt->pixel_reset_data(tim_pwm_led->led_buffer, tim_pwm_led->led_number);
 }
 
-void tim_pwm_led_show(const tim_pwm_led_t* tim_pwm_led) {
+void tim_pwm_led_show(tim_pwm_led_t* tim_pwm_led) {
   assert(tim_pwm_led != NULL);
   tim_pwm_led->send_data_cb(tim_pwm_led);
 }
 
-void tim_pwm_led_pixel_set_all_black(const tim_pwm_led_t* tim_pwm_led) {
+void tim_pwm_led_pixel_set_all_color(tim_pwm_led_t* tim_pwm_led, tim_pwm_led_pixel_t pixel) {
   uint32_t i = 0;
-  tim_pwm_led_pixel_t pixel = tim_pwm_led_pixel_init(tim_pwm_led, 0x0, 0x0, 0x0, 0xFF);
   uint16_t* led_buffer = tim_pwm_led->led_buffer + tim_pwm_led->led_buffer_offset;
   for (i = 0; i < tim_pwm_led->led_number; i++) {
     tim_pwm_led->vt->pixel_to_bytes(pixel, led_buffer + i * tim_pwm_led->pixel_bit_size);
   }
+}
+
+void tim_pwm_led_pixel_set_all_black(tim_pwm_led_t* tim_pwm_led) {
+  tim_pwm_led_pixel_t pixel = tim_pwm_led_pixel_init(tim_pwm_led, 0x0, 0x0, 0x0, 0xFF);
+  tim_pwm_led_pixel_set_all_color(tim_pwm_led, pixel);
 }

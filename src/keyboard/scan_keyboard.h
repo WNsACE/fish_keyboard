@@ -120,14 +120,10 @@ typedef struct _scan_keyboard_t {
 
 scan_keyboard_info_t* scan_keyboard_info_init(scan_keyboard_info_t* scan_keyboard_info, const char* str_keyboard_layout);
 
-const scan_keyboard_t* scan_keyboard_init(scan_keyboard_info_t* scan_keyboard_info, keyboard_get_scan_keys_t get_line_keys);
-
+void scan_keyboard_destroy(scan_keyboard_t* scan_keyboard);
 scan_keyboard_t* scan_keyboard_create(scan_keyboard_info_t* scan_keyboard_info, keyboard_get_scan_keys_t get_line_keys);
 
-void scan_keyboard_destroy(const scan_keyboard_t* scan_keyboard);
-
 uint32_t scan_keyboard_get_scan_key_list(scan_keyboard_t* scan_keyboard, scan_keyboard_send_key_type_t* key_list, uint32_t key_list_size);
-
 uint32_t scan_keyboard_get_usb_keyboard_code(scan_keyboard_t* scan_keyboard, uint8_t keyboard[8]);
 
 c_bool_t scan_keyboard_get_num_lock_statue(scan_keyboard_t* scan_keyboard);

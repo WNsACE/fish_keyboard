@@ -136,7 +136,7 @@ scan_keyboard_t* scan_keyboard_create(scan_keyboard_info_t* scan_keyboard_info, 
   return &s_scan_keyboard;
 }
 
-void scan_keyboard_destroy(const scan_keyboard_t* scan_keyboard) {
+void scan_keyboard_destroy(scan_keyboard_t* scan_keyboard) {
 
 }
 

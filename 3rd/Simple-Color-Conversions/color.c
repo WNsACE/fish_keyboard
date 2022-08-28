@@ -93,7 +93,7 @@ void convertHSVtoRGB(const float h, const float s, const float v, unsigned char 
     const float y = (1.0 - (s * secondary)) * v;
     const float z = (1.0 - (s * (1.0 - secondary))) * v;
 
-    if(primary == 0)
+    if(primary == 0 || primary == 6)
     {
         /* 0: R = v, G = c, B = a */
         *r = (v * 255.0) + 0.5;

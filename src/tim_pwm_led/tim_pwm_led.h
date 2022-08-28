@@ -8,20 +8,19 @@ BEGIN_C_DECLS
 
 tim_pwm_led_t* tim_pwm_led_init(tim_pwm_led_t* tim_pwm_led, tim_pwm_led_type_t led_type, float max_hsv_value, uint16_t* led_buffer, uint32_t led_number, uint32_t led_buffer_offset, tim_pwm_led_send_data_t send_data_cb);
 
-tim_pwm_led_pixel_t tim_pwm_led_pixel_init_by_hsv(const tim_pwm_led_t* tim_pwm_led, float h, float s);
+tim_pwm_led_pixel_t tim_pwm_led_pixel_init_by_hsv(const tim_pwm_led_t* tim_pwm_led, float h, float s, float v);
 tim_pwm_led_pixel_t tim_pwm_led_pixel_init(const tim_pwm_led_t* tim_pwm_led, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 
-void tim_pwm_led_show(const tim_pwm_led_t* tim_pwm_led);
-void tim_pwm_led_pixel_reset_data(const tim_pwm_led_t* tim_pwm_led);
-void tim_pwm_led_pixel_to_bytes(const tim_pwm_led_t* tim_pwm_led, uint32_t index, tim_pwm_led_pixel_t pixel);
-void tim_pwm_led_pixel_to_bytes_by_data(const tim_pwm_led_t* tim_pwm_led, uint32_t index, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+void tim_pwm_led_show(tim_pwm_led_t* tim_pwm_led);
+void tim_pwm_led_pixel_reset_data(tim_pwm_led_t* tim_pwm_led);
+void tim_pwm_led_pixel_to_bytes(tim_pwm_led_t* tim_pwm_led, uint32_t index, tim_pwm_led_pixel_t pixel);
+void tim_pwm_led_pixel_to_bytes_by_data(tim_pwm_led_t* tim_pwm_led, uint32_t index, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 
 
-void tim_pwm_led_pixel_set_all_black(const tim_pwm_led_t* tim_pwm_led);
+void tim_pwm_led_pixel_set_all_black(tim_pwm_led_t* tim_pwm_led);
+void tim_pwm_led_pixel_set_all_color(tim_pwm_led_t* tim_pwm_led, tim_pwm_led_pixel_t pixel);
 
-
-tim_pwm_led_t* tim_pwm_led_get(void);
-
+#define TIM_PWM_LED(p) ((tim_pwm_led_t*)(p))
 
 END_C_DECLS
 

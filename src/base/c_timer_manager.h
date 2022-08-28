@@ -7,18 +7,20 @@
 BEGIN_C_DECLS
 
 #ifndef C_TIMER_MANAGER_MAX_SIZE
-#define C_TIMER_MANAGER_MAX_SIZE  128
+#define C_TIMER_MANAGER_MAX_SIZE  16
 #endif
+
+#define C_TIMER_MANAGER_INVALID_ID      0
 
 struct _c_timer_info_t;
 
 typedef c_ret_t(*c_timer_cb_t)(struct _c_timer_info_t* timer_info);
 
 typedef struct _c_timer_info_t {
-  uint32_t id;
   uint32_t now;
-  uint32_t start;
+  uint32_t add_time;
   uint32_t duration;
+  uint32_t interval;
 
   void* ctx;
   c_timer_cb_t cb;
@@ -31,12 +33,16 @@ typedef struct _c_timer_manager_t {
   c_timer_info_t timer_infos[C_TIMER_MANAGER_MAX_SIZE];
 } c_timer_manager_t;
 
+c_timer_manager_t* c_timer_manager(void);
 
-c_timer_manager_t* c_timer_manager_init(c_timer_manager_t* timer_manager);
+c_timer_manager_t* c_timer_manager_init(void);
+void c_timer_manager_deinit(c_timer_manager_t* timer_manager);
 
-uint32_t c_timer_manager_add(c_timer_manager_t* timer_manager, uint32_t duration, c_timer_cb_t cb, void* ctx);
 
 c_ret_t c_timer_manager_remove(c_timer_manager_t* timer_manager, uint32_t id);
+c_ret_t c_timer_manager_modify(c_timer_manager_t* timer_manager, uint32_t id, uint32_t duration);
+uint32_t c_timer_manager_add(c_timer_manager_t* timer_manager, uint32_t duration, c_timer_cb_t cb, void* ctx);
+
 
 c_ret_t c_timer_manager_dispatch_one(c_timer_manager_t* timer_manager);
 
