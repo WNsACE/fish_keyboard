@@ -1,7 +1,6 @@
 ﻿#ifndef __TIM_PWM_LED_DEF_H__
 #define __TIM_PWM_LED_DEF_H__
 
-#include "../fish_keyboard_config.h"
 #include "../base/c_types_def.h"
 
 BEGIN_C_DECLS

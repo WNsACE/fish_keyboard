@@ -5,6 +5,12 @@
 #include <assert.h>
 #include <string.h>
 
+#ifdef FISH_KEYBOARD_CONFIG_H
+#include "fish_keyboard_config.h"
+#else
+#include "../fish_keyboard_config_sample.h"
+#endif
+
 #ifndef c_bool_t
 #define c_bool_t uint32_t
 #endif

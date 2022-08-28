@@ -21,6 +21,5 @@
 
 /* 灯的最大亮度（0-1.0） */
 // #define TIM_PWM_LED_STM32_LED_MAX_POWER    1.0f
-#define TIM_PWM_LED_STM32_LED_MAX_POWER    0.2f
 
 #endif

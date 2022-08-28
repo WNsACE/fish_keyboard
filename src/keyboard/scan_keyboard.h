@@ -1,7 +1,6 @@
 ﻿#ifndef __SCAN_KEYBOARD_H__
 #define __SCAN_KEYBOARD_H__
 
-#include "../fish_keyboard_config.h"
 #include "../base/c_types_def.h"
 #include "usb_hid_key_code.h"
 
