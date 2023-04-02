@@ -106,7 +106,7 @@ typedef enum _c_ret_t {
 } c_ret_t;
 
 
-typedef void(*c_foreach_cb_t)(void* data);
+typedef void(*c_foreach_cb_t)(void* data, void* ctx);
 
 
 uint64_t time_platform_now_ms(void);

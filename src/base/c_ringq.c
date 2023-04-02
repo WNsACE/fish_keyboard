@@ -48,11 +48,11 @@ void* c_ringq_pup(c_ringq_t* ringq) {
   return NULL;
 }
 
-void c_ringq_foreach(c_ringq_t* ringq, c_foreach_cb_t cb) {
+void c_ringq_foreach(c_ringq_t* ringq, c_foreach_cb_t cb, void* ctx) {
   if (ringq != NULL && !c_ringq_is_empty(ringq) && cb != NULL) {
     uint32_t head = ringq->head;
     do {
-      cb(ringq->data_list[head]);
+      cb(ringq->data_list[head], ctx);
       if (++head == ringq->max_size) {
         head = 0;
       }

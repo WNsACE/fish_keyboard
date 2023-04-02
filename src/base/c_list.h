@@ -31,7 +31,7 @@ void c_list_deinit(c_list_t* list);
 
 void c_list_remove(c_list_t* list, void* data);
 
-void c_list_foreach(c_list_t* list, c_foreach_cb_t cb);
+void c_list_foreach(c_list_t* list, c_foreach_cb_t cb, void* ctx);
 
 c_bool_t c_list_push_back(c_list_t* list, void* data);
 

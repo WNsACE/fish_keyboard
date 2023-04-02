@@ -1,4 +1,4 @@
-#ifndef __C_FIXED_LIST_H__
+﻿#ifndef __C_FIXED_LIST_H__
 #define __C_FIXED_LIST_H__
 
 #include "c_list.h"
@@ -51,9 +51,9 @@ c_fixed_list_t* c_fixed_list_init(c_fixed_list_t* list, uint32_t size, uint32_t 
 
 void c_fixed_list_deinit(c_fixed_list_t* list);
 
-void c_fixed_list_remove(c_fixed_list_t* list, void* data);
+c_bool_t c_fixed_list_remove(c_fixed_list_t* list, void* data);
 
-void c_fixed_list_foreach(c_fixed_list_t* list, c_foreach_cb_t cb);
+void c_fixed_list_foreach(c_fixed_list_t* list, c_foreach_cb_t cb, void* ctx);
 
 c_bool_t c_fixed_list_push_back(c_fixed_list_t* list, void* data);
 

@@ -1,4 +1,4 @@
-#include "c_fixed_list.h"
+﻿#include "c_fixed_list.h"
 
 static void c_fixed_list_node_deinit(c_fixed_list_node_t* node) {
   node->curr = -1;
@@ -35,7 +35,7 @@ void c_fixed_list_deinit(c_fixed_list_t* list) {
   }
 }
 
-void c_fixed_list_remove(c_fixed_list_t* list, void* data) {
+c_bool_t c_fixed_list_remove(c_fixed_list_t* list, void* data) {
   if (list != NULL) {
     c_fixed_list_node_t* prev = NULL;
     c_fixed_list_node_t* node = list->head;
@@ -54,16 +54,17 @@ void c_fixed_list_remove(c_fixed_list_t* list, void* data) {
       prev = node;
       node = node->next;
     }
+    return TRUE;
   }
-  return;
+  return FALSE;
 }
 
-void c_fixed_list_foreach(c_fixed_list_t* list, c_foreach_cb_t cb) {
+void c_fixed_list_foreach(c_fixed_list_t* list, c_foreach_cb_t cb, void* ctx) {
   if (list != NULL && cb != NULL) {
     c_fixed_list_node_t* node = list->head;
     while (node != NULL) {
       uint8_t* node_data = (uint8_t*)(list->p_fixed_mem_data + node->curr * list->type_size);
-      cb(node_data);
+      cb(node_data, ctx);
       node = node->next;
     }
   }

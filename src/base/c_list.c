@@ -42,12 +42,12 @@ c_bool_t c_list_push_back(c_list_t* list, void* data) {
   return FALSE;
 }
 
-void c_list_foreach(c_list_t* list, c_foreach_cb_t cb) {
+void c_list_foreach(c_list_t* list, c_foreach_cb_t cb, void* ctx) {
   if (list != NULL) {
     c_list_node_t* node = list->head.next;
     while (node != NULL) {
       c_list_node_t* next = node->next;
-      cb((void*)node);
+      cb((void*)node, ctx);
       node = next;
     }
   }

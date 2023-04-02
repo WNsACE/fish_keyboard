@@ -31,7 +31,7 @@ int32_t c_ringq_push(c_ringq_t* ringq, void* data);
 
 void* c_ringq_pup(c_ringq_t* ringq);
 
-void c_ringq_foreach(c_ringq_t* ringq, c_foreach_cb_t cb);
+void c_ringq_foreach(c_ringq_t* ringq, c_foreach_cb_t cb, void* ctx);
 
 END_C_DECLS
 
