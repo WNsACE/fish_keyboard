@@ -5,8 +5,8 @@ env=DefaultEnvironment().Clone()
 BIN_DIR=os.environ['BIN_DIR'];
 LIB_DIR=os.environ['LIB_DIR'];
 
-LIBS = ['cjson'] + env['LIBS']
+LIBS = ['cjson', 'fish_keyboard'] + env['LIBS']
 env.Program(os.path.join(BIN_DIR, 'key_code_map_gen'), [ Glob('key_code_map_gen/*.cc') + Glob('key_code_map_gen/*.c')], LIBS=LIBS)
-env.Program(os.path.join(BIN_DIR, 'key_code_info_gen'), [ Glob('../src/keyboard/scan_keyboard.c') + Glob('key_code_info_gen/*.cc')], LIBS=LIBS)
+env.Program(os.path.join(BIN_DIR, 'key_code_info_gen'), Glob('key_code_info_gen/*.cc'), LIBS=LIBS)
 
 

@@ -12,7 +12,7 @@
 #endif
 
 #ifndef c_bool_t
-#define c_bool_t uint32_t
+#define c_bool_t uint8_t
 #endif
 
 #ifndef TRUE

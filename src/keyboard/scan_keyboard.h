@@ -1,9 +1,10 @@
 ﻿#ifndef __SCAN_KEYBOARD_H__
 #define __SCAN_KEYBOARD_H__
 
+#include "../base/c_ringq.h"
 #include "../base/c_types_def.h"
+#include "../base/c_fixed_list.h"
 #include "usb_hid_key_code.h"
-
 BEGIN_C_DECLS
 
 #ifndef SCAN_KEYBOARD_LINE_MAX_SIZE
@@ -38,6 +39,8 @@ typedef struct _scan_keyboard_send_key_type_t {
   uint16_t y;
   scan_keyboard_key_map_type_t key;
 } scan_keyboard_send_key_type_t;
+
+C_FIXED_LIST_DEFINE(scan_keyboard_send_key_type_t, FISH_KEYBOARD_SEND_KEY_MAX_NUMBER);
 
 typedef c_bool_t (*keyboard_get_scan_keys_t)(uint32_t number_line, uint8_t* key_list, uint32_t* key_list_size);
 
@@ -111,8 +114,8 @@ typedef struct _scan_keyboard_t {
   scan_keyboard_lock_key_t is_number_lock;
   scan_keyboard_lock_key_t is_scroll_lock;
 
-  uint32_t last_send_key_list_size;
-  scan_keyboard_send_key_type_t last_send_key_list[FISH_KEYBOARD_SEND_KEY_MAX_NUMBER];
+  c_fixed_list_t* p_last_send_key_list;
+  C_FIXED_LIST_TYPE_T(scan_keyboard_send_key_type_t) last_send_key_list;
 
   keyboard_get_scan_keys_t get_line_keys;
 } scan_keyboard_t;
@@ -123,7 +126,7 @@ void scan_keyboard_destroy(scan_keyboard_t* scan_keyboard);
 scan_keyboard_t* scan_keyboard_create(scan_keyboard_info_t* scan_keyboard_info, keyboard_get_scan_keys_t get_line_keys);
 
 uint32_t scan_keyboard_get_scan_key_list(scan_keyboard_t* scan_keyboard, scan_keyboard_send_key_type_t* key_list, uint32_t key_list_size);
-uint32_t scan_keyboard_get_usb_keyboard_code(scan_keyboard_t* scan_keyboard, uint8_t keyboard[8]);
+c_bool_t scan_keyboard_get_usb_keyboard_code(scan_keyboard_t* scan_keyboard, uint8_t keyboard[8]);
 
 c_bool_t scan_keyboard_get_num_lock_statue(scan_keyboard_t* scan_keyboard);
 c_bool_t scan_keyboard_get_caps_lock_statue(scan_keyboard_t* scan_keyboard);

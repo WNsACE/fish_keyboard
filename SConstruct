@@ -30,6 +30,8 @@ CPPPATH = [
   joinPath(ROOT, "3rd"),
   joinPath(ROOT, "src"),
   joinPath(ROOT, "src/base"),
+  joinPath(ROOT, '3rd/gtest/googletest'),
+  joinPath(ROOT, '3rd/gtest/googletest/include'),
 ]
 
 
@@ -45,9 +47,10 @@ if OS_NAME == "Windows" :
       OS_SUBSYSTEM_CONSOLE += '/SUBSYSTEM:CONSOLE  '
       OS_SUBSYSTEM_WINDOWS += '/SUBSYSTEM:WINDOWS  '
 
-
+os.environ['ROOT'] = ROOT;
 os.environ['BIN_DIR'] = BIN_DIR;
 os.environ['LIB_DIR'] = LIB_DIR;
+os.environ['GTEST_ROOT'] = joinPath(ROOT, '3rd/gtest/googletest');
 
 DefaultEnvironment(
   CCFLAGS = CCFLAGS,
@@ -61,7 +64,9 @@ DefaultEnvironment(
 
 SConscriptFiles= [
   '3rd/cjson/SConscript',
+  'src/SConscript', 
   'tools/SConscript', 
+  'tests/SConscript', 
   ]
 
 SConscript(SConscriptFiles)
