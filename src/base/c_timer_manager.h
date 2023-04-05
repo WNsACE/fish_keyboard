@@ -21,6 +21,7 @@ typedef struct _c_timer_info_t {
   uint64_t now;
   uint64_t start;
   uint32_t duration;
+  uint32_t interval;
 
   void* ctx;
   c_timer_cb_t cb;

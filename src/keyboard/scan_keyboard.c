@@ -194,13 +194,13 @@ static void scan_keyboard_update_key_status(scan_keyboard_t* scan_keyboard, uint
   UPDATE_SCAN_KEYBOARB_LOCK_KEY(scroll_lock, x, y, down);
 }
 
-static c_bool_t scan_keyboard_is_FX_key_by_usb(scan_keyboard_key_map_type_t key) {
-  return USB_HID_KEY_CODE_F1 <= key && key <= USB_HID_KEY_CODE_F12;
-}
+// static c_bool_t scan_keyboard_is_FX_key_by_usb(scan_keyboard_key_map_type_t key) {
+//   return USB_HID_KEY_CODE_F1 <= key && key <= USB_HID_KEY_CODE_F12;
+// }
 
-static c_bool_t scan_keyboard_is_special_control_key_by_usb(scan_keyboard_key_map_type_t key) {
-  return (USB_HID_KEY_CODE_INSERT <= key && key <= USB_HID_KEY_CODE_UP) || ( USB_HID_KEY_CODE_RETURN <= key && key <= USB_HID_KEY_CODE_SPACE);
-}
+// static c_bool_t scan_keyboard_is_special_control_key_by_usb(scan_keyboard_key_map_type_t key) {
+//   return (USB_HID_KEY_CODE_INSERT <= key && key <= USB_HID_KEY_CODE_UP) || ( USB_HID_KEY_CODE_RETURN <= key && key <= USB_HID_KEY_CODE_SPACE);
+// }
 
 static uint32_t scan_keyboard_add_key_by_list(usb_hid_key_code_t key, uint32_t x, uint32_t y, scan_keyboard_send_key_type_t* key_list, uint32_t key_list_size, uint32_t t_key_list_size) {
   if (key_list_size > t_key_list_size) {

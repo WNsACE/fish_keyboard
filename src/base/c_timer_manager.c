@@ -69,6 +69,7 @@ c_ret_t c_timer_manager_dispatch_one(c_timer_manager_t* timer_manager) {
     c_timer_info_t* time_info = timer_manager->timer_infos + i;
     if(time_info->cb != NULL) {
       uint64_t now = time_platform_now_ms();
+      time_info->interval = now - time_info->now;
       time_info->now = now;
       if (time_info->start + time_info->duration <= now) {
         c_ret_t ret = time_info->cb(time_info);
