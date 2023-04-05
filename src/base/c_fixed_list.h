@@ -1,7 +1,7 @@
 ﻿#ifndef __C_FIXED_LIST_H__
 #define __C_FIXED_LIST_H__
 
-#include "c_list.h"
+#include "c_types_def.h"
 
 BEGIN_C_DECLS
 

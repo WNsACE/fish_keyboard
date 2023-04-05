@@ -29,10 +29,50 @@
 
 
 #include "gtest/gtest.h"
+#include "base/c_types_def.h"
+
+BEGIN_C_DECLS
+
+#if defined(WIN32)
+#include <Windows.h>
+LARGE_INTEGER freq;
+LARGE_INTEGER start;
+
+int64_t int64_muldiv(int64_t value, int64_t numer, int64_t denom) {
+  int64_t q = value / denom;
+  int64_t r = value % denom;
+  return q * numer + r * numer / denom;
+}
+
+uint64_t time_platform_now_ms(void) {
+  uint64_t now;
+  LARGE_INTEGER qpc_t;
+  QueryPerformanceCounter(&qpc_t);
+  now = int64_muldiv(qpc_t.QuadPart - start.QuadPart, 1000000000, freq.QuadPart);
+  return now / 1000000;
+}
+
+
+#else defined(__unix)
+
+
+#endif
+
+END_C_DECLS
 
 GTEST_API_ int main(int argc, char** argv) {
   printf("Running main() from gtest_main.cc\n");
   testing::InitGoogleTest(&argc, argv);
+
+#if defined(WIN32)
+  memset(&freq, 0x0, sizeof(LARGE_INTEGER));
+  memset(&start, 0x0, sizeof(LARGE_INTEGER));
+  QueryPerformanceFrequency(&freq);
+  QueryPerformanceCounter(&start);
+#else defined(__unix)
+
+#endif
+
   RUN_ALL_TESTS();
   return 0;
 }

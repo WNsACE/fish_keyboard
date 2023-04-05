@@ -2,7 +2,7 @@
 #define __C_TIMER_MANAGER_H__
 
 #include "c_types_def.h"
-#include "c_list.h"
+#include "c_fixed_list.h"
 
 BEGIN_C_DECLS
 
@@ -17,10 +17,10 @@ struct _c_timer_info_t;
 typedef c_ret_t(*c_timer_cb_t)(struct _c_timer_info_t* timer_info);
 
 typedef struct _c_timer_info_t {
-  uint32_t now;
-  uint32_t add_time;
+  uint32_t id;
+  uint64_t now;
+  uint64_t start;
   uint32_t duration;
-  uint32_t interval;
 
   void* ctx;
   c_timer_cb_t cb;

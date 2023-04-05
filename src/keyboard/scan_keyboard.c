@@ -180,8 +180,8 @@ static void scan_keyboard_update_key_status(scan_keyboard_t* scan_keyboard, uint
   UPDATE_SCAN_KEYBOARB_KEY(left_gui, x, y, down, is_special_key);
   UPDATE_SCAN_KEYBOARB_KEY(right_gui, x, y, down, is_special_key);
 
-  UPDATE_SCAN_KEYBOARB_KEY(left_gui, x, y, down, is_special_key);
-  UPDATE_SCAN_KEYBOARB_KEY(right_gui, x, y, down, is_special_key);
+  UPDATE_SCAN_KEYBOARB_KEY(left_alt, x, y, down, is_special_key);
+  UPDATE_SCAN_KEYBOARB_KEY(right_alt, x, y, down, is_special_key);
 
   UPDATE_SCAN_KEYBOARB_KEY(left_ctrl, x, y, down, is_special_key);
   UPDATE_SCAN_KEYBOARB_KEY(right_ctrl, x, y, down, is_special_key);
@@ -193,15 +193,6 @@ static void scan_keyboard_update_key_status(scan_keyboard_t* scan_keyboard, uint
   UPDATE_SCAN_KEYBOARB_LOCK_KEY(number_lock, x, y, down);
   UPDATE_SCAN_KEYBOARB_LOCK_KEY(scroll_lock, x, y, down);
 }
-
-// static c_bool_t scan_keyboard_is_number_key(scan_keyboard_t* scan_keyboard, uint8_t x, uint8_t y) {
-//   if (scan_keyboard->info->number_lock_x != 0 && scan_keyboard->info->number_lock_y != 0) {
-//     if (scan_keyboard->info->number_lock_x <= x || scan_keyboard->info->number_lock_y <= y) {
-//       return TRUE;
-//     }
-//   }
-//   return FALSE;
-// }
 
 static c_bool_t scan_keyboard_is_FX_key_by_usb(scan_keyboard_key_map_type_t key) {
   return USB_HID_KEY_CODE_F1 <= key && key <= USB_HID_KEY_CODE_F12;
@@ -233,10 +224,11 @@ uint32_t scan_keyboard_get_scan_key_list(scan_keyboard_t* scan_keyboard, scan_ke
   p_last_send_key_list = scan_keyboard->p_last_send_key_list;
   key_node = c_fixed_list_get_first_node(p_last_send_key_list);
   for (y = 0; y < scan_keyboard->info->line_size; y++) {
-    uint32_t line_key_list_size = 0;
     uint8_t line_key_list[SCAN_KEYBOARD_LINE_KEY_MAX_SIZE] = {0};
+    uint32_t line_key_list_size = ARRAY_SIZE(line_key_list);
     if (scan_keyboard->get_line_keys(y, line_key_list, &line_key_list_size)) {
       for (x = 0; x < SCAN_KEYBOARD_LINE_KEY_MAX_SIZE; x++) {
+        c_bool_t cache = FALSE;
         c_bool_t is_special_key = FALSE;
         c_bool_t is_down = line_key_list[x] == TRUE;
         scan_keyboard_update_key_status(scan_keyboard, x, y, is_down, &is_special_key);
@@ -246,12 +238,15 @@ uint32_t scan_keyboard_get_scan_key_list(scan_keyboard_t* scan_keyboard, scan_ke
             if (!is_down) {
               scan_keyboard_send_key_type_t tmp_key1 = {0};
               c_fixed_list_pop(p_last_send_key_list, &tmp_key1);
+              key_node = c_fixed_list_get_first_node(p_last_send_key_list);
+            } else {
+              cache = TRUE;
+              key_node = c_fixed_list_get_next_node(p_last_send_key_list, key_node);
             }
-            key_node = c_fixed_list_get_next_node(p_last_send_key_list, key_node);
           }
         }
 
-        if (is_down && !is_special_key) {
+        if (is_down && !is_special_key && !cache) {
           usb_hid_key_code_t key_code = (usb_hid_key_code_t)scan_keyboard->info->key_map[0][y][x];
           t_key_list_size = scan_keyboard_add_key_by_list(key_code, x, y, key_list, key_list_size, t_key_list_size);
         }
@@ -288,7 +283,15 @@ c_bool_t scan_keyboard_get_usb_keyboard_code(scan_keyboard_t* scan_keyboard, uin
   size = scan_keyboard_get_scan_key_list(scan_keyboard, common_key_list, ARRAY_SIZE(common_key_list));
 
   send_key_size = scan_keyboard_get_send_usb_keyboard_code(scan_keyboard, common_key_list, size);
-  if (send_key_size == 0) {
+  if (send_key_size == 0 && 
+      !scan_keyboard->is_left_ctrl && 
+      !scan_keyboard->is_left_shift && 
+      !scan_keyboard->is_left_alt && 
+      !scan_keyboard->is_left_gui && 
+      !scan_keyboard->is_right_ctrl && 
+      !scan_keyboard->is_right_shift && 
+      !scan_keyboard->is_right_alt && 
+      !scan_keyboard->is_right_gui) {
     memset(keyboard, 0x0, 8 * sizeof(uint8_t));
   } else {
     uint32_t i = 0;

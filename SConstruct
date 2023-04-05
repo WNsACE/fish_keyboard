@@ -36,6 +36,7 @@ CPPPATH = [
 
 
 if OS_NAME == "Windows" :
+  LIBS += ['Winmm']
   CCFLAGS += " -DWIN32 -D_WIN32 -DWINDOWS /EHsc -D_CONSOLE  /DEBUG /Od  /FS /Z7 /utf-8 /MD "
   if TARGET_ARCH == 'x86':
       LINKFLAGS += '/MACHINE:X86 /DEBUG '

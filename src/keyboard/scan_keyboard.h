@@ -1,7 +1,6 @@
 ﻿#ifndef __SCAN_KEYBOARD_H__
 #define __SCAN_KEYBOARD_H__
 
-#include "../base/c_ringq.h"
 #include "../base/c_types_def.h"
 #include "../base/c_fixed_list.h"
 #include "usb_hid_key_code.h"
